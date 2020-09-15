@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ActionButton } from './layout/ActionButton';
 import { Title } from './layout/Title';
 import { noop, shouldLive } from './utils';
 
@@ -91,26 +92,15 @@ function App(): any {
         <div>
           {!started ? (
             <>
-              <button
-                className="px-3 py-2 mr-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-900"
-                onClick={clearBoard}
-              >
-                Clear Board
-              </button>
-              <button
-                className="px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white"
-                onClick={startGame}
-              >
+              <ActionButton onClick={clearBoard}>Clear Board</ActionButton>
+              <ActionButton variant="primary" onClick={startGame}>
                 Start Game
-              </button>
+              </ActionButton>
             </>
           ) : (
-            <button
-              className="px-3 py-2 rounded-lg bg-red-400 hover:bg-red-500 text-white"
-              onClick={endGame}
-            >
+            <ActionButton variant="secondary" onClick={endGame}>
               Stop Game
-            </button>
+            </ActionButton>
           )}
         </div>
       </div>
