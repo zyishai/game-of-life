@@ -31,3 +31,13 @@ test('Hoverring over Cell component', () => {
   expect(onHover).toHaveBeenCalledTimes(1);
   expect(onHover).toBeCalledWith(1, 1);
 });
+
+test('Hovering out from Cell component', () => {
+  const onHoverLeave = jest.fn();
+  const cell = render(<Cell row={1} column={1} onHoverLeave={onHoverLeave} />);
+
+  userEvent.hover(cell.getByTestId('cell-1-1'));
+  userEvent.unhover(cell.getByTestId('cell-1-1'));
+  expect(onHoverLeave).toHaveBeenCalledTimes(1);
+  expect(onHoverLeave).toBeCalledWith(1, 1);
+});
