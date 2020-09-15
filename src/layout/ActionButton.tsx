@@ -1,13 +1,12 @@
 import React from 'react';
 
+type StringOrNumber = string | number;
 type Variant = 'primary' | 'secondary' | 'none';
-
-interface Props {
+type Props = {
   variant?: Variant;
   onClick?: () => void;
-}
+};
 
-type StringOrNumber = string | number;
 const variants: { [key in Variant]: Array<StringOrNumber> } = {
   primary: ['bg-blue-500', 'hover:bg-blue-600', 'text-white'],
   secondary: ['bg-red-400', 'hover:bg-red-500', 'text-white'],
