@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AppState } from './AppState';
-import { ActionButton } from './layout/ActionButton';
 import { Board } from './layout/Board';
-import { Title } from './layout/Title';
+import { Navbar } from './layout/Navbar';
+import { usePlayingState } from './use-playing-state';
 import { shouldLive } from './utils';
 
 function App(): any {
@@ -15,17 +15,16 @@ function App(): any {
       live: false,
     })),
   );
-  const [playing, setPlaying] = useState(false);
-  const [started, setStarted] = useState(false);
+  const { playing, startPlaying, stopPlaying } = usePlayingState();
   const intervalRef = useRef<any>(null);
 
   useEffect(() => {
-    if (started) {
+    if (playing) {
       intervalRef.current = setTimeout(advance, 500);
     } else {
       clearTimeout(intervalRef.current as any);
     }
-  }, [started, cells]);
+  }, [playing, cells]);
 
   function advance() {
     const nextColony = [...cells];
@@ -66,38 +65,14 @@ function App(): any {
     );
   }
 
-  function startGame() {
-    advance();
-    setStarted(true);
-    setPlaying(true);
-  }
-
-  function endGame() {
-    setStarted(false);
-    setPlaying(false);
-  }
-
   return (
     <AppState.Provider value={{ playing }}>
       <div className="flex flex-col items-center h-full w-full">
-        <nav className="w-full flex justify-between items-center p-3 mb-3">
-          <Title className="text-blue-500">Game of Life</Title>
-
-          <div>
-            {!started ? (
-              <>
-                <ActionButton onClick={clearBoard}>Clear Board</ActionButton>
-                <ActionButton variant="primary" onClick={startGame}>
-                  Start Game
-                </ActionButton>
-              </>
-            ) : (
-              <ActionButton variant="secondary" onClick={endGame}>
-                Stop Game
-              </ActionButton>
-            )}
-          </div>
-        </nav>
+        <Navbar
+          startGame={startPlaying}
+          endGame={stopPlaying}
+          clearBoard={clearBoard}
+        />
 
         <Board
           rows={rows}
