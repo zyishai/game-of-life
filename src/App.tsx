@@ -1,21 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ActionButton } from './layout/ActionButton';
+import { Cell } from './layout/Cell';
 import { Title } from './layout/Title';
 import { noop, shouldLive } from './utils';
-
-const Cell: React.FC<CellProps> = (props) => {
-  const isPending = useMemo(() => !props.gameStarted, [props.gameStarted]);
-
-  const color = props.live
-    ? 'bg-blue-300'
-    : `bg-gray-200 ${isPending && 'hover:bg-gray-300'}`;
-
-  const handleClick = () => {
-    props.onClick && isPending && props.onClick(props.row, props.column);
-  };
-
-  return <div className={`h-8 w-8 ${color}`} onClick={handleClick}></div>;
-};
 
 function App(): any {
   const rows = 10;
@@ -117,7 +104,6 @@ function App(): any {
           <Cell
             key={`${cell.row},${cell.column}`}
             onClick={!started ? toggleCell : noop}
-            gameStarted={started}
             {...cell}
           />
         ))}
