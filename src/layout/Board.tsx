@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppState } from '../AppState';
 import { Cell } from './Cell';
 
 type Props = {
@@ -10,6 +11,8 @@ type Props = {
 };
 
 export const Board: React.FC<Props> = (props) => {
+  const { playing } = useContext(AppState);
+
   return (
     <div
       className={`inline-grid gap-x-2 gap-y-2 cursor-pointer ${props.className}`}
@@ -21,7 +24,9 @@ export const Board: React.FC<Props> = (props) => {
       {props.colony.map((colonyUnit) => (
         <Cell
           key={`${colonyUnit.row},${colonyUnit.column}`}
-          className={`${colonyUnit.live ? 'bg-blue-300' : 'hover:bg-blue-300'}`}
+          className={`${
+            colonyUnit.live ? 'bg-blue-300' : playing ? '' : 'hover:bg-blue-300'
+          }`}
           onClick={props.onCellClick}
           {...colonyUnit}
         />
