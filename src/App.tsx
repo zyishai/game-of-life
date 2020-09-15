@@ -1,68 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { AppState } from './AppState';
 import { Board } from './layout/Board';
 import { Navbar } from './layout/Navbar';
+import { useConwayColony } from './use-conway-colony';
+import { useInterval } from './use-interval';
 import { usePlayingState } from './use-playing-state';
-import { shouldLive } from './utils';
 
-function App(): any {
-  const rows = 10;
-  const cols = 25;
-  const [cells, setCells] = useState(
-    Array.from(new Array(rows * cols), (_, id) => ({
-      row: Math.floor(id / cols),
-      column: id % cols,
-      live: false,
-    })),
+const rows = 10;
+const cols = 25;
+
+function App() {
+  const { colony, advance, toggleColonyUnit, resetColony } = useConwayColony(
+    rows,
+    cols,
   );
   const { playing, startPlaying, stopPlaying } = usePlayingState();
-  const intervalRef = useRef<any>(null);
+  const { start: startGameLoop, stop: stopGameLoop } = useInterval(
+    advance,
+    200,
+    playing,
+    colony,
+  );
 
   useEffect(() => {
     if (playing) {
-      intervalRef.current = setTimeout(advance, 500);
+      startGameLoop();
     } else {
-      clearTimeout(intervalRef.current as any);
+      stopGameLoop();
     }
-  }, [playing, cells]);
-
-  function advance() {
-    const nextColony = [...cells];
-
-    for (const cell of cells) {
-      nextColony[cell.row * cols + cell.column] = {
-        ...cell,
-        live: shouldLive(cell, cells),
-      };
-    }
-
-    setCells(nextColony);
-  }
+  }, [playing]);
 
   function handleCellClick(row: number, column: number) {
     if (!playing) {
-      setCells((c) =>
-        c.map((cell, id) => {
-          if (id === row * cols + column) {
-            return {
-              ...cell,
-              live: !cell.live,
-            };
-          }
-
-          return cell;
-        }),
-      );
+      toggleColonyUnit(row, column);
     }
   }
 
   function clearBoard() {
-    setCells((c) =>
-      c.map((cell) => ({
-        ...cell,
-        live: false,
-      })),
-    );
+    resetColony();
   }
 
   return (
@@ -77,7 +52,7 @@ function App(): any {
         <Board
           rows={rows}
           columns={cols}
-          colony={cells}
+          colony={colony}
           onCellClick={handleCellClick}
         />
       </div>
