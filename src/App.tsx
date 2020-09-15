@@ -17,12 +17,12 @@ const Cell: React.FC<CellProps> = (props) => {
 };
 
 function App(): any {
-  const width = 10;
-  const height = 10;
+  const rows = 10;
+  const cols = 25;
   const [cells, setCells] = useState(
-    Array.from(new Array(width * height), (_, id) => ({
-      row: Math.floor(id / width),
-      column: id % width,
+    Array.from(new Array(rows * cols), (_, id) => ({
+      row: Math.floor(id / cols),
+      column: id % cols,
       live: false,
     })),
   );
@@ -41,7 +41,7 @@ function App(): any {
     const nextColony = [...cells];
 
     for (const cell of cells) {
-      nextColony[cell.row * width + cell.column] = {
+      nextColony[cell.row * cols + cell.column] = {
         ...cell,
         live: shouldLive(cell, cells),
       };
@@ -53,7 +53,7 @@ function App(): any {
   function toggleCell(row: number, column: number) {
     setCells((c) =>
       c.map((cell, id) => {
-        if (id === row * width + column) {
+        if (id === row * cols + column) {
           return {
             ...cell,
             live: !cell.live,
@@ -116,9 +116,12 @@ function App(): any {
       </div>
 
       <div
-        className={`inline-grid grid-cols-10 gap-x-2 gap-y-2 ${
+        className={`inline-grid gap-x-2 gap-y-2 ${
           !started && 'cursor-pointer'
         }`}
+        style={{
+          gridTemplateColumns: `repeat(${cols}, 1fr)`,
+        }}
       >
         {cells.map((cell) => (
           <Cell
