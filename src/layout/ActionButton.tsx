@@ -19,7 +19,7 @@ export const ActionButton: React.FC<Props> = (props) => {
   const colors = `${bg} ${bgHover} ${text}`;
   return (
     <button
-      className={`px-3 py-2 rounded-lg ${colors} ${props.className}`}
+      className={`px-3 py-2 rounded-lg text-sm ${colors} ${props.className}`}
       onClick={props.onClick}
     >
       {props.children}
