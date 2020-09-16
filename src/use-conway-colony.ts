@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { shouldLive } from './utils';
 
 export const useConwayColony = (rows: number, columns: number) => {
@@ -9,6 +9,22 @@ export const useConwayColony = (rows: number, columns: number) => {
       live: false,
     })),
   );
+
+  useEffect(() => {
+    setCells((c) => {
+      const temp = [...c];
+      temp.length = rows * columns;
+
+      return temp.map(
+        (cell, id) =>
+          cell || {
+            row: Math.floor(id / columns),
+            column: id % columns,
+            live: false,
+          },
+      );
+    });
+  }, [rows, columns]);
 
   function advance() {
     const nextColony = [...cells];

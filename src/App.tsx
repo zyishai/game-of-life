@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppState } from './AppState';
 import { Board } from './layout/Board';
+import { BoardProperties } from './layout/BoardProperties';
 import { GameControls } from './layout/GameControls';
 import { Navbar } from './layout/Navbar';
 import { useConwayColony } from './use-conway-colony';
 import { useInterval } from './use-interval';
 import { usePlayingState } from './use-playing-state';
 
-const rows = 10;
-const cols = 25;
-
 function App() {
+  const [rows, setRows] = useState(10);
+  const [cols, setCols] = useState(10);
   const { colony, advance, toggleColonyUnit, resetColony } = useConwayColony(
     rows,
     cols,
@@ -52,6 +52,12 @@ function App() {
           colony={colony}
           onCellClick={handleCellClick}
           className="mb-4"
+        />
+        <BoardProperties
+          rows={rows}
+          columns={cols}
+          onRowsChange={setRows}
+          onColumnsChange={setCols}
         />
         <GameControls
           startGame={startPlaying}
