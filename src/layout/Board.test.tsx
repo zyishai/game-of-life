@@ -37,3 +37,5 @@ test('Board handle cell clicks properly', () => {
   expect(onCellClick).toBeCalledTimes(1);
   expect(onCellClick).toBeCalledWith(0, 0);
 });
+
+// TODO: MISSING TESTS FOR DRAG N DROP FUNCTIONALITY

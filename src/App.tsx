@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { AppState } from './AppState';
 import { Board } from './layout/Board';
+import { GameControls } from './layout/GameControls';
 import { Navbar } from './layout/Navbar';
 import { useConwayColony } from './use-conway-colony';
 import { useInterval } from './use-interval';
@@ -43,17 +44,20 @@ function App() {
   return (
     <AppState.Provider value={{ playing }}>
       <div className="flex flex-col items-center h-full w-full">
-        <Navbar
-          startGame={startPlaying}
-          endGame={stopPlaying}
-          clearBoard={clearBoard}
-        />
+        <Navbar />
 
         <Board
           rows={rows}
           columns={cols}
           colony={colony}
           onCellClick={handleCellClick}
+          className="mb-4"
+        />
+        <GameControls
+          startGame={startPlaying}
+          endGame={stopPlaying}
+          clearBoard={clearBoard}
+          className="grid grid-flow-col gap-x-2"
         />
       </div>
     </AppState.Provider>

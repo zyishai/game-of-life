@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppState } from '../AppState';
 import { Cell } from './Cell';
 
@@ -12,6 +12,10 @@ type Props = {
 
 export const Board: React.FC<Props> = (props) => {
   const { playing } = useContext(AppState);
+  const [mouseDown, setMouseDown] = useState(false);
+  const onBoardDragStart = () => setMouseDown(true);
+  const onBoardDragEnd = () => setMouseDown(false);
+  const onCellHover = mouseDown ? props.onCellClick : undefined;
 
   return (
     <div
@@ -20,17 +24,25 @@ export const Board: React.FC<Props> = (props) => {
         gridTemplateColumns: `repeat(${props.columns}, 1fr)`,
       }}
       data-testid="colony-container"
+      onMouseDown={onBoardDragStart}
+      onMouseUp={onBoardDragEnd}
     >
-      {props.colony.map((colonyUnit) => (
-        <Cell
-          key={`${colonyUnit.row},${colonyUnit.column}`}
-          className={`${
-            colonyUnit.live ? 'bg-blue-300' : playing ? '' : 'hover:bg-blue-300'
-          }`}
-          onClick={props.onCellClick}
-          {...colonyUnit}
-        />
-      ))}
+      {props.colony.map((colonyUnit) => {
+        const cellClassName = colonyUnit.live
+          ? 'bg-blue-300'
+          : playing
+          ? ''
+          : 'hover:bg-blue-300';
+        return (
+          <Cell
+            key={`${colonyUnit.row},${colonyUnit.column}`}
+            className={cellClassName}
+            onClick={props.onCellClick}
+            onHover={onCellHover}
+            {...colonyUnit}
+          />
+        );
+      })}
     </div>
   );
 };
